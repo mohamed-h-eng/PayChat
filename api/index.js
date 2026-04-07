@@ -185,49 +185,81 @@
 
 // // VERCEL FIX 2: Export the Express app instead of listening on a port
 // module.exports = app;
-// ... top of file remains the same (requires, cors, express.json) ...
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const cors = require("cors");
+const path = require("path");
 
+// THIS IS THE LINE THAT WAS MISSING!
+const app = express();
+
+// 1. Basic Middleware
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
+// 2. Database Connection Logic (Cached for Vercel)
 const User = require("../backend/models/User");
-
-// 1. Define the DB Connection Logic
 let isConnected = false;
 
 async function connectToDB() {
     if (isConnected) {
-        return true; // Already connected, skip
+        return true;
     }
     try {
         const db = await mongoose.connect(process.env.MONGO_URI);
         isConnected = db.connections[0].readyState; 
         console.log("db connected");
         
-        // Check for admin account only after successful connection
-        await CreateAdmin(); 
+        // Create admin if not exists
+        await CreateAdmin();
         
         return true;
     } catch (error) {
         console.log("db connection error:", error.message);
-        throw error; // Throw error so the middleware catches it
+        throw error;
     }
 }
 
 async function CreateAdmin() {
-    // ... (Keep your exact CreateAdmin code here, but you can remove the isConnected check 
-    // since we only call this after we know it connected) ...
+    try {
+        const { ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
+        
+        if (!ADMIN_NAME || !ADMIN_EMAIL || !ADMIN_PASSWORD) {
+            return console.log("Missing Admin .env variables");
+        }
+        
+        const admin = await User.findOne({ email: ADMIN_EMAIL });
+        
+        if (!admin) {
+            const decodedPassword = await bcrypt.hash(ADMIN_PASSWORD, 10);
+            await User.create({
+                name: ADMIN_NAME,
+                email: ADMIN_EMAIL,
+                password: decodedPassword,
+                role: "admin"
+            });
+            console.log("Admin Account Created Successfully");
+        }
+    } catch (error) {
+        console.log({ message: "Error Creating Admin", data: error.message });
+    }
 }
 
-// 2. THE FIX: Add Database Middleware
-// This forces EVERY incoming request to ensure the DB is connected first
+// 3. Vercel Database Middleware
+// This forces Express to wait for MongoDB to connect before processing the login request
 app.use(async (req, res, next) => {
     try {
         await connectToDB();
-        next(); // DB is ready, move on to the routes!
+        next();
     } catch (error) {
         return res.status(500).json({ error: "Database connection failed" });
     }
 });
 
-// 3. Define Routes AFTER the middleware
+// 4. Routes
 const authRoutes = require("../backend/routes/authRoutes");
 const accountRoutes = require("../backend/routes/accountRoutes");
 const transactionRoutes = require("../backend/routes/transactionRoutes");
@@ -236,5 +268,5 @@ app.use("/api", authRoutes);
 app.use("/api", accountRoutes);
 app.use("/api", transactionRoutes);
 
-// 4. Export the app
+// 5. Export for Vercel Serverless
 module.exports = app;
