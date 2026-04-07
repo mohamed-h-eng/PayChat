@@ -1,0 +1,122 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { apiCall } from './api';
+import './style.css'
+
+function formatRelativeDate(dateString) {
+  const date = new Date(dateString);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  date.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+  yesterday.setHours(0, 0, 0, 0);
+  if (date.getTime() === today.getTime()) return "Today";
+  if (date.getTime() === yesterday.getTime()) return "Yesterday";
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const [account, setAccount] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { fetchDashboardData(); }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      let accRes = await apiCall('/account/me');
+      if (accRes.data.msg === "User Account Not Found") {
+        accRes = await apiCall('/account/create', 'POST');
+      }
+      setAccount(accRes.data.data);
+      const txRes = await apiCall('/transaction/view');
+      if (txRes.data.data) setTransactions(txRes.data.data);
+    } catch (error) {
+      console.error("Dashboard fetch error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeposit = async () => {
+    const amount = prompt("Enter amount to deposit:");
+    if (!amount) return;
+    await apiCall('/transaction/deposit', 'POST', { amount: Number(amount) });
+    fetchDashboardData();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
+  if (loading) return <div className="p-6 text-center">Loading your wallet...</div>;
+
+  return (
+    <div className="container">
+      <div className="topSection">
+
+        {/* Fixed logout button */}
+        <div className="d-flex justify-content-end px-2 pt-2">
+          <button onClick={handleLogout}
+            className="btn btn-sm rounded-pill fw-semibold"
+            style={{ background: 'rgba(0,0,0,0.08)', color: 'rgba(0,0,0,0.55)', fontSize: '0.7rem', letterSpacing: '0.05em' }}>
+            Sign out
+          </button>
+        </div>
+
+        <div className="account">
+          <p className="topSection-title">Available Balance</p>
+          <h2 className="Balance">${account?.balance?.toFixed(2) || '0.00'}</h2>
+          <span className="iban">{account?.iban || 'No IBAN'}</span>
+        </div>
+
+        <div className="quick-actions">
+          <div className="action-item">
+            <button className="icon-btn outline-btn" onClick={() => navigate('/transfer')} aria-label="Send">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+              </svg>
+            </button>
+            <span>Send</span>
+          </div>
+          <div className="action-item">
+            <button className="icon-btn gradient-btn" onClick={handleDeposit} aria-label="Top Up">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
+            <span>Top Up</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="transactions">
+        <p className="history-label">History</p>
+        {transactions.length === 0 && <p className="text-sm text-gray-500 px-3">No transactions yet.</p>}
+        {transactions.map(tx => {
+          const isIncoming = tx.type === 'TRANSFER_IN' || tx.type === 'DEPOSIT';
+          return (
+            <div key={tx._id} className="card" style={{display:'flex',flexDirection:'row'}}>
+              <div className="image"></div>
+              <div className="info">
+                <p style={{ fontSize: '16px', fontWeight: 700 }}>
+                  {tx.note && tx.note !== "na" ? tx.note.charAt(0).toUpperCase() + tx.note.slice(1) : 'NA'}
+                  <span> - {formatRelativeDate(tx.createdAt)}</span>
+                </p>
+                <span style={{ fontSize: '9px', color: '#949494' }}>
+                  {isIncoming ? tx.sender_iban : tx.receiver_iban}
+                </span>
+              </div>
+              <p className="amount" style={{ color: isIncoming ? 'green' : 'red' }}>
+                {isIncoming ? '+' : '$-'}{tx.amount}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

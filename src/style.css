@@ -1,0 +1,117 @@
+.container{
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+.topSection{
+    /* background-color:red; */
+    background: #B2FF59;
+    background: linear-gradient(231deg, rgba(178, 255, 89, 1) 15%, rgba(218, 237, 100, 1) 62%);
+    width:100%;
+    height:45vh;
+}
+.topSection-title{
+    font-size:12px;
+    font-weight:500;
+}
+.topSection-title ,.Balance{
+    color:black;
+}
+.account{
+    /* margin-top:30px; */
+    display:flex;
+    flex-direction:column;
+}
+.Balance{
+    font-size:45px;
+    margin:10px;
+}
+.iban{
+    color:rgb(70, 70, 70);
+    margin:10px;
+    font-size:10px;
+    font-weight:500;
+}
+.transactions{
+    background-color:white;
+    width:100%;
+    height:55vh;
+}
+
+.card{
+    /* border:1px solid red; */
+    display:flex;
+    align-items:center;
+    padding: 0 10px;
+    gap:10px;
+    color:black;
+    height:fit-content;
+    padding:10px;
+    overflow:auto
+}
+.card .image{
+    width:35px;
+    height:35px;
+    background-color:grey;
+    border-radius:5px;
+}
+.card .info{
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+    font-size:14px;
+    line-height:1.4;
+    color:black
+}
+.card .info span{
+    font-size:12px;
+    color:rgb(88, 88, 88);
+    font-weight:500
+}
+.t-iban{
+    font-size:4px;
+}
+.amount{
+    align-items:right;
+    font-weight:700;
+}
+/* .navBar{
+    background-color:white;
+    width:100%;
+    height:10vh;
+    border-top:1px solid rgb(221, 221, 221)
+} */
+.quick-actions{
+    display:flex;
+    flex-direction:row;
+    gap:30px;
+    justify-content:center
+}
+.action-item{
+    display:flex;
+    flex-direction:column;
+    width:65px;
+}
+.action-item span{
+    text-align:center;
+    color:black;
+}
+.icon-btn{
+    border:none;
+    background-color:black;
+    color:#ffffff;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    align-self:center
+}
+.action-send{
+    background-image:url("./assets/arrow-up-right.png");
+    background-color:black
+}
+
+.history-label{
+    color:black;
+    text-align:left;
+    margin:0 10px;
+}
