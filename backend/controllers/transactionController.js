@@ -145,7 +145,7 @@ const sendController = async (req, res) => {
 
         await Account.findOneAndUpdate(
             { user_id: sender.user_id },
-            { $inc: { balance: amount } },
+            { $inc: { balance: -amount } },
             { returnDocument: 'after', session }
         );
         
