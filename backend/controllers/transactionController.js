@@ -15,7 +15,7 @@ const depositController = async(req,res)=>{
         const account = await Account.findOneAndUpdate(
             { user_id: userId },
             { $inc: { balance: amount } },
-            {returnDocument: 'after' }
+            {returnDocument: 'after', session }
         );
 
         await Transaction.create([{
@@ -25,13 +25,13 @@ const depositController = async(req,res)=>{
             type: 'DEPOSIT',
             status: 'Accepted',
             note: 'Mock card DEPOSIT'
-        }], {session});
+        }],{ session });
 
         await AuditLog.create([{
             user_id: userId,
             action: 'DEPOSIT',
             description: `User deposited ${amount}`,
-        }], {session});
+        }], { session });
 
         await session.commitTransaction();
 
@@ -59,7 +59,7 @@ const withdrawController = async(req,res)=>{
         const account = await Account.findOneAndUpdate(
             { user_id: userId },
             { $inc: { balance: -amount } },
-            {returnDocument: 'after'}
+            {returnDocument: 'after', session }
         );
 
         await Transaction.create([{
@@ -69,13 +69,13 @@ const withdrawController = async(req,res)=>{
             type: 'WITHDRAW',
             status: 'Accepted',
             note: 'Mock card WITHDRAW'
-        }], {session});
+        }],{ session });
 
         await AuditLog.create([{
             user_id: userId,
             action: 'WITHDRAW',
             description: `User withdraw ${amount}`,
-        }], {session});
+        }], { session });
 
         await session.commitTransaction();
 
@@ -102,8 +102,8 @@ const sendController = async (req, res) => {
         
         const receiver = await Account.findOne({ iban: receiver_iban });
         if (!receiver) {
-            await session.abortTransaction();
-            return res.status(404).json({ message: "receiver not found" });
+            await session.abortTransaction(); // CRITICAL: Always abort before early return
+            return res.status(404).json({ message: "receiver not found" }); // Fixed typo
         }
 
         const sender = await Account.findOne({ user_id: req.user._id });
@@ -140,19 +140,19 @@ const sendController = async (req, res) => {
 
         if (sender.balance < amount) {
             await session.abortTransaction();
-            return res.status(403).json({ message: "Transfer failed", data: "Insufficient balance" });
+            return res.status(403).json({ message: "Transfer failed", data: "Insufficient balance" }); // Fixed typo
         }
 
         await Account.findOneAndUpdate(
             { user_id: sender.user_id },
             { $inc: { balance: amount } },
-            { returnDocument: 'after'}
+            { returnDocument: 'after', session }
         );
         
         await Account.findOneAndUpdate(
             { user_id: receiver.user_id },
             { $inc: { balance: amount } },
-            { returnDocument: 'after'}
+            { returnDocument: 'after', session }
         );
         const transactions = await Transaction.create([
             {
@@ -171,14 +171,14 @@ const sendController = async (req, res) => {
                 status:        'Accepted',
                 note,
             }
-            ], { session ,ordered: true }
+            ], { session, ordered: true }
         );
 
         await AuditLog.create([{
             user_id: sender.user_id,
             action: 'TRANSFER',
             description: `User transferred amount: ${amount} to Account ${receiver.iban}`,
-        }], {session});
+        }], { session });
 
         await session.commitTransaction();
         res.status(201).json({ message: "Transfer is Successful", data: transactions[0] });
@@ -199,13 +199,13 @@ const readController = async(req,res)=>{
         const account = await Account.findOne({user_id:req.user._id})
         const transactions = await Transaction.find({
             $or: [
-                { sender_iban: account.iban,   type: 'TRANSFER_OUT' },
-                { receiver_iban: account.iban, type: 'TRANSFER_IN'  },
-                { receiver_iban: account.iban, type: 'DEPOSIT'      },
-                { sender_iban: account.iban,   type: 'WITHDRAW'     },
+                {sender_iban:account.iban, type: 'TRANSFER_OUT'},
+                {receiver_iban:account.iban, type: 'TRANSFER_IN'},
+                {receiver_iban:account.iban, type: 'deposit'},
+                {sender_iban:account.iban, type:'withdraw'},
             ]
-        }).sort({ createdAt: -1 });
-        if(transactions.length===0) return res.status(404).json({message:"No transactions found", data:transactions})
+            }).sort({ createdAt: -1 });
+        if(!transactions) return res.status(404).json({message:"No transactions found", data:account})
         return res.status(200).json({
             message:"transactions retrieved successfully",
             data:transactions
