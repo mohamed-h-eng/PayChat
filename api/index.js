@@ -116,15 +116,15 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
-const accountRoutes = require("./routes/accountRoutes");
-const transactionRoutes = require("./routes/transactionRoutes");
+const authRoutes = require("../backend/routes/authRoutes");
+const accountRoutes = require("../backend/routes/accountRoutes");
+const transactionRoutes = require("../backend/routes/transactionRoutes");
 
 app.use("/api", authRoutes);
 app.use("/api", accountRoutes);
 app.use("/api", transactionRoutes);
 
-const User = require("./models/User");
+const User = require("../backend/models/User");
 
 // VERCEL FIX 1: Cache the DB connection to prevent connection pooling limits
 let isConnected = false;
