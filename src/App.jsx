@@ -11,12 +11,10 @@ export default function App() {
     const token = localStorage.getItem('token');
     return token ? children : <Navigate to="/" />;
   };
-
+  
   return (
     <Router>
-      {/* <div className="min-h-screen bg-gray-100 p-4 font-sans">
-        <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden"> */}
-          <Routes>
+      <Routes>
             <Route path="/" element={<Auth />} />
             <Route path="/dashboard" element={
               <ProtectedRoute><Dashboard /></ProtectedRoute>
@@ -28,8 +26,6 @@ export default function App() {
               <ProtectedRoute><Status /></ProtectedRoute>
             } />
           </Routes>
-        {/* </div>
-      </div> */}
     </Router>
   );
 }

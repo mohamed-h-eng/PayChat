@@ -19,7 +19,7 @@
 // };
 // Use a relative path so the browser automatically prepends the current domain 
 // (e.g., https://your-app.vercel.app/api or http://localhost:3000/api)
-const BASE_URL = '/api'; 
+const BASE_URL = 'http://localhost:3000/api'; 
 
 export const apiCall = async (endpoint, method = 'GET', body = null) => {
   const token = localStorage.getItem('token');
