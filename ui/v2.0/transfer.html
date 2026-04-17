@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+		<div class="phone">
+			<div class="dynamic-island"></div>
+            <div class="layout ">
+                <div class="topbar" id="back-btn">
+                    <img src="assets/arrow-left.svg">
+                    <h2 class="app-title">Send</h2>
+                </div>
+                <input class="receiver-info" placeholder="To">
+                <div class="scroll-area contact-list">
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="transfer-info">
+                    <div class="txn-item">
+                        <div class="txn-icon"></div>
+                        <div class="txn-info">
+                            <p>ahmed</p>
+                            <p>@ahmed_22</p>
+                        </div>
+                    </div>
+                    <div class="amount">
+                        <p>
+                            <span>$</span>
+                            <span class="amount-value">00</span><span class="float">.0</span>
+                        </p>
+                    </div>
+                    <div class="quick-amount">
+                        <button class="item">50</button>
+                        <button class="item">100</button>
+                        <button class="item">200</button>
+                        <button class="item">1000</button>
+                    </div>
+                    <div class="layout keypad">
+                        <button>7</button>
+                        <button>8</button>
+                        <button>9</button>
+                        <button>4</button>
+                        <button>5</button>
+                        <button>6</button>
+                        <button>1</button>
+                        <button>2</button>
+                        <button>3</button>
+                        <button id="erase"><img src="assets/eraser.svg"></button>
+                        <button>0</button>
+                        <button id="submit"> <img src="assets/arrow-right.svg"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const contact = document.querySelectorAll(".txn-item")
+            const contactList = document.querySelector(".contact-list")
+            const transferInfo = document.querySelector(".transfer-info")
+            const receiver_input = document.querySelector(".receiver-info")
+            // const amount = document.querySelector(".amount-value");
+            // const buttons = document.querySelectorAll(".keypad button");
+            const submit = document.querySelector("#submit")
+            // const username = document.querySelector(".auth-username")
+            // const pin = document.querySelector(".auth-pin")
+            // const usrname_input = document.querySelector(".usrname-input")
+            // const usrname_btn = document.querySelector(".usrname-btn")
+            const back_btn = document.querySelector("#back-btn")
+            // transferInfo.style.display = "none"
+            
+            //assign callback to contact item
+            contact.forEach(contact=>{
+                contact.addEventListener("click",()=>{
+                    //switch to amount and note screen
+                    receiver_input.style.display = "none"
+                    contactList.style.display = "none"
+                    transferInfo.style.display = "block"
+                })
+            })
+
+            // Optional: Make inputs readonly so users are forced to use the on-screen keypad
+            // inputs.forEach(input => input.setAttribute("readonly", true));
+            const amountEl = document.querySelector(".amount-value");
+            const floatEl = document.querySelector(".float");
+            const buttons = document.querySelectorAll(".keypad button");
+            const quick_buttons = document.querySelectorAll(".quick-amount button");
+            const eraseBtn = document.querySelector("#erase");
+
+            let amount = "0"; // store as string (like real apps)
+
+            // format function (always show 2 decimal places)
+            function formatAmount(val) {
+                return Number(val).toLocaleString("en-US", {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1
+                });
+            }
+
+            // update UI
+            function updateDisplay() {
+                const formatted = formatAmount(amount);
+                const [intPart, decimalPart] = formatted.split(".");
+                
+                amountEl.childNodes[0].nodeValue = intPart;
+                floatEl.textContent = "." + decimalPart;
+            }
+
+            // handle number input
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const value = button.innerText.trim();
+                    if (value >= "0" && value <= "9") {
+                        if (amount.length > 6) return;
+                        amount += value;
+                        updateDisplay();
+                    }
+                });
+            });
+            quick_buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const value = button.innerText.trim();
+                    if (value >= "0" && value <= "9") {
+                        if (amount.length > 6) return;
+                        amount  = `${(parseInt(amount) + parseInt(value))}`
+                        updateDisplay();
+                    }
+                });
+            });
+
+            // handle erase (backspace)
+            eraseBtn.addEventListener("click", () => {
+                if (amount.length > 1) {
+                    amount = amount.slice(0, -1);
+                } else {
+                    amount = "0";
+                }
+                updateDisplay();
+            });
+
+            // initialize
+            updateDisplay();
+        })
+    </script>
+</body>
+</html>
