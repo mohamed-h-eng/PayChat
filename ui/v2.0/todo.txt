@@ -1,0 +1,8 @@
+make contact selectable and add to local array
+when 1 user is selected send button
+
+transfer 
+    first user selects receiver from contacts
+    or type username in input and validate with api if user exists
+
+    then a keypad is show to enter amount

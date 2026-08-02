@@ -1,0 +1,32 @@
+.container{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--color-border);
+    border-radius:var(--border-radius);
+    padding: 17px 20px 17px 10px;
+    gap:8px;
+    width:100%;
+    justify-content:left;
+    box-sizing:border-box;
+}
+.input{
+    background-color:white;
+    border:none;
+    font-size:16px;
+    /* border:1px solid red; */
+    flex:1;
+}
+.input:focus{
+    outline:none;
+}
+.icon{
+    font-size:20px;
+    color:var(--text)
+    /* border:1px solid red; */
+}
+.checkbox{
+    border:none;
+    width:fit-content;
+    /* border:1px solid red; */
+    padding:0;
+}

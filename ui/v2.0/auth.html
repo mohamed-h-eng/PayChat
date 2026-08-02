@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_1.css">
+</head>
+<body>
+    <div class="container">
+		<div class="phone">
+			<div class="dynamic-island"></div>
+            <div class="auth-username">
+                <div class="layout title">
+                    <h1 class="app-title">PayChat</h1>
+                    <span>Finance decisions with ease</span>
+                </div>
+                <div class="layout">
+                    <div class="auth-form">
+                        <input class="usrname-input" type="text" placeholder="@User">
+                        <div>
+                            <span>Forgot account?</span>
+                        </div>
+                        <button class="usrname-btn" type="submit">
+                            <img src="assets/arrow-right.svg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-pin">
+
+                <div class="layout topbar" id="back-btn">
+                    <img src="assets/arrow-left.svg">
+                <h2 class="app-title">Enter Pin</h2>
+                </div>
+                <div class="layout pin">
+                    <input type="password" placeholder="⬤" maxlength="1">
+                    <input type="password" placeholder="⬤" maxlength="1">
+                    <input type="password" placeholder="⬤" maxlength="1">
+                    <input type="password" placeholder="⬤" maxlength="1">
+                </div>
+                <div class="layout keypad">
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                    <button>4</button>
+                    <button>5</button>
+                    <button>6</button>
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button id="erase"><img src="assets/eraser.svg"></button>
+                    <button>0</button>
+                    <button id="submit"> <img src="assets/arrow-right.svg"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const inputs = document.querySelectorAll(".pin input");
+    const buttons = document.querySelectorAll(".keypad button");
+    const submit = document.querySelector("#submit")
+    const username = document.querySelector(".auth-username")
+    const pin = document.querySelector(".auth-pin")
+    const usrname_input = document.querySelector(".usrname-input")
+    const usrname_btn = document.querySelector(".usrname-btn")
+    const back_btn = document.querySelector("#back-btn")
+    // initialize styles
+    submit.style.backgroundColor = "";
+    submit.style.borderColor = "white";
+
+    submit.disabled = true;
+    pin.style.display = "none"
+
+    let currentIndex = 0;
+
+    
+    //handle username validation
+    usrname_btn.addEventListener("click",()=>{
+        if(usrname_input.value.length < 3){
+            alert("username length must be more than 3")
+        }
+        else{
+            username.style.display = "none"
+            pin.style.display = "block"
+        }
+    })
+    //handle back-btn
+    back_btn.addEventListener("click",()=>{
+        username.style.display = "block"
+        pin.style.display = "none"
+    })
+    // Optional: Make inputs readonly so users are forced to use the on-screen keypad
+    inputs.forEach(input => input.setAttribute("readonly", true));
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            const value = button.innerText.trim();
+            if (value >= "0" && value <= "9") {
+                // 1. Handle Number Input
+                if (currentIndex < inputs.length) {
+                    inputs[currentIndex].value = value;
+                    inputs[currentIndex].style.borderColor = "black";
+                    currentIndex++;
+                }
+                if (currentIndex == 4){
+                    submit.style.backgroundColor = "black";
+                    submit.style.borderColor = "black";
+                    submit.disabled = false;
+
+                }
+            } else if (button.id == "submit") {
+                // 2. Handle Submission
+                if (currentIndex === inputs.length) {
+                    // Gather all values into a single string
+                    const pin = Array.from(inputs).map(input => input.value).join("");
+                    
+                    console.log("PIN Submitted:", pin);
+                    alert(`PIN Submitted successfully: ${pin}`);
+                    
+                    // TODO: Add your API call or validation logic here
+                    
+                } else {
+                    // Prevent submission if not all 4 digits are entered
+                    alert("Please enter a 4-digit PIN.");
+                }
+            } else{
+                // 3. Handle Backspace (for the empty button)
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    inputs[currentIndex].value = "";
+                    inputs[currentIndex].style.borderColor = "var(--border)";
+                }
+                submit.style.backgroundColor = "";
+                submit.style.borderColor = "white";
+                submit.disabled = true;
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
