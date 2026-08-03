@@ -1,16 +1,19 @@
-const express = require("express")
-const router = express.Router()
+import express from "express";
+const router = express.Router();
+
 //add controllers
-const {
-    depositController,
-    withdrawController,
-    sendController,
-    readController} = require("../controllers/transactionController")
-const {authMiddleWare} = require("../middleware/authmiddleware")
+import {
+  depositController,
+  withdrawController,
+  sendController,
+  readController,
+} from "../controllers/transactionController.js";
+
+import { authMiddleWare } from "../middleware/authmiddleware.js";
 
 router.post("/transaction/deposit",authMiddleWare,depositController)
 router.post("/transaction/withdraw",authMiddleWare,withdrawController)
 router.post("/transaction/send",authMiddleWare,sendController)
 router.get("/transaction/view",authMiddleWare,readController)
 
-module.exports = router
+export default router

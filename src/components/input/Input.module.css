@@ -21,8 +21,8 @@
 }
 .icon{
     font-size:20px;
-    color:var(--text)
-    /* border:1px solid red; */
+    color:var(--text);
+    cursor:pointer
 }
 .checkbox{
     border:none;

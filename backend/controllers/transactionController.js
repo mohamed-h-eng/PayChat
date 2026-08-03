@@ -1,8 +1,8 @@
-const User = require("../models/User")
-const Account = require("../models/Account")
-const Transaction = require("../models/Transaction")
-const AuditLog = require("../models/Audit")
-const mongoose= require("mongoose")
+import User from "../models/User.js";
+import Account from "../models/Account.js";
+import Transaction from "../models/Transaction.js";
+import AuditLog from "../models/Audit.js";
+import mongoose from "mongoose";
 
 const depositController = async(req,res)=>{
     const { amount } = req.body;
@@ -214,7 +214,7 @@ const readController = async(req,res)=>{
         res.status(500).json({ message: 'Transaction view failed',data:error.message });
     }
 }
-module.exports = {
+export {
     depositController,
     withdrawController,
     sendController,

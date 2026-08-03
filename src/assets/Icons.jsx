@@ -5,6 +5,7 @@ import { BiHide,BiShow } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { SiApple } from "react-icons/si";
+import { MdOutlineMailOutline } from "react-icons/md";
 export const Icons = {
     user:FaRegUser,
     lock:MdOutlineLock,
@@ -13,5 +14,6 @@ export const Icons = {
     hide:BiHide,
     show:BiShow,
     google:FcGoogle,
-    apple:SiApple
+    apple:SiApple,
+    email:MdOutlineMailOutline,
 }

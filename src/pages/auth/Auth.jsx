@@ -5,25 +5,37 @@ import Button  from '../../components/button/Button.jsx'
 import {Icons} from '../../assets/Icons'
 
 import {useState} from 'react'
+import {useForm}  from 'react-hook-form'
 
 export default function Auth() {
   const [isRegister, setIsRegister] = useState(true)
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
+    mode: "all",
+  });
+
+  const password = watch("password");
+  
   return (
     <div className={styles.main}>
       <div className={styles.body}>
         <div className={styles.header}>
           <img width="88px" height="80px" src={logo} />
-          <h1>Welcome Back</h1>
+          <h1>Welcome {isRegister?"":"Back"}</h1>
           <p style={{color:"var(--text)"}} >Manage your finances securely</p>
         </div>
         <div className={styles.loginForm}>
-          {isRegister?(<Input LeftIcon={Icons.user} placeholder="Email" type="email" RightIcon=""/>):<></>}
+          {isRegister?(<Input LeftIcon={Icons.email} placeholder="Email" type="email" RightIcon=""/>):<></>}
           <Input LeftIcon={Icons.user} placeholder="Username" RightIcon=""/>
-          <Input LeftIcon={Icons.lock} placeholder="Password" type="password" RightIcon={Icons.hide}/>
+          <Input LeftIcon={Icons.lock} placeholder="Password" type="password" RightIcon={Icons.hide} RightIconShow={Icons.show}/>
           <div className={styles.options}>
             <div className={styles.option_1}>
-              <Input placeholder="text" type="checkbox" lable="Remember me"/>
+              <Input type="checkbox" lable="Remember me"/>
             </div>
             <Button type="text">Forgot?</Button>
           </div>

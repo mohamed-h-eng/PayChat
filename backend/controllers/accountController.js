@@ -1,8 +1,9 @@
-require("dotenv").config()
-const Account = require("../models/Account")
-const crypto = require('crypto');
-const User = require("../models/User")
-const createController = async(req,res)=>{
+import "dotenv/config";
+import Account from "../models/Account.js";
+import crypto from "crypto";
+import User from "../models/User.js";
+
+export const createController = async(req,res)=>{
     try{
         const {id} = req.user
         const isAccount = await Account.findOne({user_id:id}).populate("user_id")
@@ -28,7 +29,7 @@ const createController = async(req,res)=>{
     }
 }
 
-const readController = async(req,res)=>{
+export const readController = async(req,res)=>{
     try{
         const {id} = req.user
         const isAccount = await Account.findOne({user_id:id}).populate("user_id")
@@ -48,7 +49,7 @@ const readController = async(req,res)=>{
     }
 }
 
-const uploadPhotoController = async (req, res) => {
+export const uploadPhotoController = async (req, res) => {
   try {
 
     if (!req.file)
@@ -78,9 +79,3 @@ const uploadPhotoController = async (req, res) => {
     res.status(500).json({ message: 'Failed to upload photo', error: err.message });
   }
 };
-
-module.exports = {
-    createController,
-    readController,
-    uploadPhotoController
-}

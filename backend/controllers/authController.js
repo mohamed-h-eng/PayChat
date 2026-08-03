@@ -1,8 +1,9 @@
-require("dotenv").config
-const mongoose = require("mongoose")
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
-const User = require("../models/User")
+import "dotenv/config";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+
 const registerController = async (req,res)=>{
     try{
         const{name, email,password} = req.body;
@@ -112,7 +113,7 @@ const changePasswordController = async (req,res)=>{
     }
 }
 
-module.exports = {
+export {
     registerController,
     loginController,
     logoutController,

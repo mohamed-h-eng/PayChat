@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema({
     sender_iban:{
@@ -30,4 +30,4 @@ const transactionSchema = new mongoose.Schema({
 },{timestamps:true})
 
 const Transaction = mongoose.model("Transaction",transactionSchema);
-module.exports = Transaction;
+export default Transaction;

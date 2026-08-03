@@ -1,4 +1,4 @@
-const joi = require("joi")
+import joi from "joi";
 
 const registerSchema = joi.object({
     name:joi.string().min(3).max(30).required(),
@@ -12,7 +12,7 @@ const loginSchema = joi.object({
     password:joi.string().required()
 })
 
-module.exports = {
+export {
     registerSchema,
     loginSchema
 }
