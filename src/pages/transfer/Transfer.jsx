@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiCall } from '../api';
+import { apiCall } from '../../utils/api';
 
 const LIME = '#c6f135';
 const LIME_GRAD = 'linear-gradient(148deg, #c6f135 0%, #e2f55c 55%, #d4ef3a 100%)';

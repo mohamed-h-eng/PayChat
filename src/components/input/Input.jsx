@@ -1,5 +1,6 @@
 import styles from "./Input.module.css";
 import { useState } from "react";
+import {Icons} from '../../assets/Icons'
 
 export default function Input({
   LeftIcon,
@@ -8,36 +9,46 @@ export default function Input({
   RightIcon,
   RightIconShow,
   lable,
+  registration,
+  error,
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  function handleShowPassword() {
-    if (showPassword) {
-      setShowPassword(false);
-    } else {
-      setShowPassword(true);
-    }
-  }
+
   return (
-    <div className={`${styles.container} ${styles[type]}`}>
-      {LeftIcon && <LeftIcon className={styles.icon} />}
-      <input
-        className={styles.input}
-        placeholder={placeholder}
-        type={type == "password" && showPassword ? "text" : type}
-      />
-      {lable || <></>}
-      {RightIcon &&
-        (showPassword ? (
-          <RightIconShow
-            className={styles.icon}
-            onClick={() => handleShowPassword()}
-          />
-        ) : (
-          <RightIcon
-            className={styles.icon}
-            onClick={() => handleShowPassword()}
-          />
-        ))}
+    <div className={styles.main}>
+      <div className={`${styles.container} ${styles[type]} ${error && styles.errorState}`}>
+        {LeftIcon && <LeftIcon className={`${styles.icon} ${error && styles.errorState}`} />}
+
+        <input
+          className={`${styles.input} ${error && styles.errorState}`}
+          placeholder={placeholder}
+          type={type === "password" && showPassword ? "text" : type}
+          {...registration}
+        />
+        <p>{lable}</p>
+
+        {type === "password" &&
+          RightIcon &&
+          (showPassword ? (
+            <RightIconShow
+              className={styles.icon}
+              onClick={() => setShowPassword(false)}
+            />
+          ) : (
+            <RightIcon
+              className={styles.icon}
+              onClick={() => setShowPassword(true)}
+            />
+          ))}
+      </div>
+      {error && (
+        <div className={styles.error}>
+          <Icons.wrong/>
+          <p>
+            {error.message}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

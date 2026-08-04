@@ -1,3 +1,8 @@
+.main{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
 .container{
     display:flex;
     align-items:center;
@@ -29,4 +34,16 @@
     width:fit-content;
     /* border:1px solid red; */
     padding:0;
+}
+.errorState{
+    color:red;
+    border-color:red;
+    border-width:2px;
+}
+.error{
+    color:red;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    padding-left:8px;
 }

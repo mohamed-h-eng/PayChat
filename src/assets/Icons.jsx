@@ -6,6 +6,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { SiApple } from "react-icons/si";
 import { MdOutlineMailOutline } from "react-icons/md";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+
 export const Icons = {
     user:FaRegUser,
     lock:MdOutlineLock,
@@ -16,4 +18,5 @@ export const Icons = {
     google:FcGoogle,
     apple:SiApple,
     email:MdOutlineMailOutline,
+    wrong:IoMdCloseCircleOutline,
 }

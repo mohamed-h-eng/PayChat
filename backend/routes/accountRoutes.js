@@ -10,9 +10,10 @@ import {
 import { authMiddleWare } from "../middleware/authmiddleware.js";
 import {upload}  from "../middleware/uploadmiddleware.js";
 
-router.patch('/account/me/photo',  authMiddleWare, upload.single('photo'), uploadPhotoController);
+router.patch('/photo',  authMiddleWare, upload.single('photo'), uploadPhotoController);
 
-router.post("/account/create",authMiddleWare,createController)
-router.get("/account/me",authMiddleWare,readController)
+router.post("/create",authMiddleWare,createController)
+
+router.get("/",authMiddleWare,readController)
 
 export default router;

@@ -88,9 +88,9 @@ app.use(async (req, res, next) => {
 });
 
 // 4. Routes
-app.use("/api", authRoutes);
-app.use("/api", accountRoutes);
-app.use("/api", transactionRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/me", accountRoutes);
+app.use("/api/transfer", transactionRoutes);
 
 // 5. Export for Vercel Serverless
 export default app;

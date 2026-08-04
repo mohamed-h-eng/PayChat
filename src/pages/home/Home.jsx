@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiCall } from '../api';
-import './style.css'
+import { apiCall } from '../../utils/api';
+// import './style.css'
 
 function formatRelativeDate(isoString) {
   const date = new Date(isoString);

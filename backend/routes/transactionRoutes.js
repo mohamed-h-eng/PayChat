@@ -11,9 +11,9 @@ import {
 
 import { authMiddleWare } from "../middleware/authmiddleware.js";
 
-router.post("/transaction/deposit",authMiddleWare,depositController)
-router.post("/transaction/withdraw",authMiddleWare,withdrawController)
-router.post("/transaction/send",authMiddleWare,sendController)
-router.get("/transaction/view",authMiddleWare,readController)
+router.post("/deposit",authMiddleWare,depositController)
+router.post("/withdraw",authMiddleWare,withdrawController)
+router.post("/send",authMiddleWare,sendController)
+router.get("/view",authMiddleWare,readController)
 
 export default router
