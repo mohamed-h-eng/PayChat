@@ -4,26 +4,31 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-const registerController = async (req,res)=>{
+const registerController = async (req,res, next)=>{
     try{
         const{name, email,password} = req.body;
-        let user = await User.findOne({email})
-        if(user) {
-            return res.status(201).json({
-                message:"User already Registered",
-                data:user
+        let userData = await User.findOne({email})
+        let response;
+        if(userData) {
+            return res.success(
+            {   
+                statusCode: 200,
+                message: "User already Registered",
+                data: userData
             })
         }
+
         const decodedPassword = await bcrypt.hash(password,10)
-        user = await User.create({name, email,password:decodedPassword})
-        if(user) return res.status(200).json({
-            message:"User Registered Successfully",
-            data:user
-        })
+        userData = await User.create({name, email,password:decodedPassword})
+        return res.success(
+            {   
+                statusCode: 200,
+                message: "User registered successfully.",
+                data: userData
+            }
+        )
     }catch(error){
-        res.status(500).json({
-            message:"Error Registering User"
-        })
+        return next(error)
     }
 }
 
@@ -41,7 +46,6 @@ const loginController = async (req,res)=>{
         if(!checkPassword){
             return res.status(400).json({message:"Incorrect password"})
         }
-        // return console.log(user);
         const token = jwt.sign(
             {
                 id:user._id,

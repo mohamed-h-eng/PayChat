@@ -12,6 +12,7 @@ import authRoutes from "../backend/routes/authRoutes.js";
 import accountRoutes from "../backend/routes/accountRoutes.js";
 import transactionRoutes from "../backend/routes/transactionRoutes.js";
 
+import {responseHandler} from '../backend/middleware/response.handler.middleware.js'
 // Create Express app
 const app = express();
 
@@ -87,10 +88,13 @@ app.use(async (req, res, next) => {
   }
 });
 
-// 4. Routes
+// 4. handlers
+app.use(responseHandler);
+
+// 5. Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/me", accountRoutes);
 app.use("/api/transfer", transactionRoutes);
 
-// 5. Export for Vercel Serverless
+// 6. Export for Vercel Serverless
 export default app;
